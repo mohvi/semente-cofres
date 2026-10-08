@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="pt-MZ">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Cofres desafio em madeira com tabela de moedas. Metas de 2.000 a 100.000 MT. Entregamos em Pemba e enviamos para as 11 províncias de Moçambique.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SEMENTE Cofres Desafio · Poupa hoje, colhe amanhã">
+<meta property="og:description" content="Escolha a sua meta, guarde na caixa e risque uma moeda a cada depósito. Encomende pelo WhatsApp.">
+<meta property="og:image" content="https://mohvi.github.io/semente-cofres/img/og.jpg">
+<meta property="og:url" content="https://mohvi.github.io/semente-cofres/">
+<meta name="theme-color" content="#1F5E25">
+<link rel="icon" href="img/favicon.png">
+<title>SEMENTE Cofres Desafio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+/* Layout: loja de uma página — hero com cartão de moedas interativo, passos, catálogo filtrável, envio por província e encomenda que gera a mensagem de WhatsApp */
+:root{
+  --paper:#F3F7EF; --surface:#FFFFFF; --ink:#13241A; --muted:#58695C; --line:#D9E3D3;
+  --leaf:#1F5E25; --leaf-2:#2E7D32; --leaf-soft:#E2EEDB; --coin:#E8A33D; --coin-deep:#A86A0C; --coin-soft:#FBEBCB;
+  --wa:#1FA855; --wa-ink:#FFFFFF; --x:#D62828;
+  --display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0E1510; --surface:#172119; --ink:#E6F0E1; --muted:#9DB09F; --line:#2A382C;
+  --leaf:#8FD18F; --leaf-2:#6CC070; --leaf-soft:#1C2D1E; --coin:#F0B456; --coin-deep:#F0B456; --coin-soft:#33280F;
+  --wa:#25C463; --wa-ink:#06200F; --x:#FF6B6B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E1510; --surface:#172119; --ink:#E6F0E1; --muted:#9DB09F; --line:#2A382C;
+  --leaf:#8FD18F; --leaf-2:#6CC070; --leaf-soft:#1C2D1E; --coin:#F0B456; --coin-deep:#F0B456; --coin-soft:#33280F;
+  --wa:#25C463; --wa-ink:#06200F; --x:#FF6B6B; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.05}
+h2{font-size:clamp(30px,4.6vw,46px);font-weight:800;letter-spacing:-.01em}
+.eyebrow{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--coin-deep)}
+.lead{color:var(--muted);font-size:18px;max-width:58ch;margin:0}
+section{padding-block:72px}
+.sec-head{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:66px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand b{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:.02em}
+.brand small{display:block;font-size:10px;letter-spacing:.2em;color:var(--muted);font-weight:600;margin-top:-3px}
+nav.links{display:flex;gap:26px;font-weight:600;font-size:15px}
+nav.links a{text-decoration:none;color:var(--muted)}
+nav.links a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:700 16px/1 var(--body);padding:15px 24px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn:focus-visible,button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--coin);outline-offset:2px}
+.btn-main{background:var(--leaf-2);color:#fff}
+:root[data-theme="dark"] .btn-main{color:#08200C}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn-main{color:#08200C}}
+.btn-ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line)}
+.btn-wa{background:var(--wa);color:var(--wa-ink);font-size:17px;padding:17px 26px;width:100%}
+.btn-sm{padding:11px 18px;font-size:14.5px}
+
+/* hero */
+.hero{padding-block:44px 64px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+.hero h1{font-size:clamp(48px,8.4vw,98px);font-weight:800;letter-spacing:-.025em}
+.hero h1 .gold{color:var(--coin-deep)}
+.hero-copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.trust{display:flex;gap:10px 20px;flex-wrap:wrap;font-size:14px;color:var(--muted);font-weight:500}
+.trust span{display:inline-flex;align-items:center;gap:7px}
+.trust i{width:8px;height:8px;border-radius:50%;background:var(--leaf-2);display:inline-block}
+.hero-art{position:relative;min-width:0}
+.hero-art .disc{position:absolute;inset:6% 2% 4% 6%;border-radius:50%;background:radial-gradient(circle at 40% 35%,var(--coin-soft),transparent 70%)}
+.hero-art img{position:relative;display:block;width:100%;height:auto}
+.try{position:absolute;left:-4%;bottom:-2%;width:min(300px,62%);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:14px 14px 12px;box-shadow:0 20px 40px -18px rgba(0,0,0,.35)}
+.try-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12.5px;color:var(--muted);font-weight:600}
+.try-top b{font-family:var(--display);font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums}
+.coins{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px}
+.coin{aspect-ratio:1;max-width:100%;border-radius:50%;border:2px solid var(--coin-deep);background:var(--coin-soft);color:var(--coin-deep);font:700 12px/1 var(--body);cursor:pointer;position:relative;padding:0;font-variant-numeric:tabular-nums}
+.coin.big{background:var(--coin);color:#3B2600}
+.coin.x::before,.coin.x::after{content:"";position:absolute;left:12%;right:12%;top:50%;height:3px;border-radius:2px;background:var(--x);transform:rotate(45deg)}
+.coin.x::after{transform:rotate(-45deg)}
+.try-hint{font-size:12px;color:var(--muted);margin-top:8px}
+
+/* passos */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:s}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:10px}
+.step .n{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--coin);color:#3B2600;font:800 20px/1 var(--display)}
+.step h3{font-size:22px}
+.step p{margin:0;color:var(--muted)}
+
+/* catálogo */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.chip{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 16px;border-radius:999px;font:600 14.5px/1 var(--body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:flex;flex-direction:column}
+.card img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;max-width:100%}
+.card-b{padding:16px 18px 18px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card-b h3{font-size:20px;font-weight:600}
+.meta{display:flex;gap:6px 12px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.price-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:auto;padding-top:10px}
+.price{font:800 22px/1 var(--display);font-variant-numeric:tabular-nums}
+.price small{font:500 13px var(--body);color:var(--muted)}
+.tag{position:absolute;top:12px;left:12px;background:var(--coin);color:#3B2600;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:6px 11px;border-radius:999px}
+.imgbox{position:relative}
+.featured{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;border-color:var(--coin)}
+.featured img{height:100%;aspect-ratio:auto;min-height:280px}
+.featured .card-b{padding:28px;gap:12px;justify-content:center}
+.featured h3{font-size:clamp(26px,3.4vw,36px);font-weight:800}
+.featured .why{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;color:var(--muted)}
+.featured .why li::before{content:"✓ ";color:var(--leaf-2);font-weight:700}
+
+/* envio */
+.ship{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start}
+.ship-card{background:var(--leaf);color:#fff;border-radius:var(--r);padding:28px;display:flex;flex-direction:column;gap:14px}
+:root[data-theme="dark"] .ship-card{background:var(--leaf-soft);color:var(--ink)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .ship-card{background:var(--leaf-soft);color:var(--ink)}}
+.ship-card h3{font-size:28px;font-weight:800}
+.ship-card p{margin:0;opacity:.9}
+.provs{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.prov{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.prov b{font-weight:700}
+.prov span{font-size:13.5px;color:var(--muted)}
+.prov.home{border-color:var(--leaf-2);box-shadow:inset 0 0 0 1px var(--leaf-2)}
+.prov.home span{color:var(--leaf-2);font-weight:600}
+
+/* encomenda */
+.order{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:start}
+form.f{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.fld{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fld.full{grid-column:1/-1}
+label{font-weight:600;font-size:14px}
+.opt{font-weight:400;color:var(--muted)}
+input,select,textarea{font:500 16px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;width:100%}
+textarea{resize:vertical;min-height:70px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);font:700 20px/1 var(--body);cursor:pointer}
+.qty input{text-align:center;font-variant-numeric:tabular-nums}
+.pay{display:flex;gap:8px;flex-wrap:wrap}
+.pay label{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:600}
+.pay input{width:auto;accent-color:var(--leaf-2)}
+.err{color:var(--x);font-size:13.5px;font-weight:600;grid-column:1/-1}
+aside.sum{position:sticky;top:calc(env(safe-area-inset-top,0px) + 86px);background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:14px}
+.sum-pic{display:flex;gap:14px;align-items:center}
+.sum-pic img{width:84px;height:84px;border-radius:14px;object-fit:cover;flex:none}
+.sum-pic b{font-family:var(--display);font-size:20px;line-height:1.1}
+.rows{display:flex;flex-direction:column;gap:8px;font-size:15px;border-top:1px solid var(--line);padding-top:14px}
+.row{display:flex;justify-content:space-between;gap:12px}
+.row span:last-child{font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.row.total{font:800 22px/1.2 var(--display);border-top:1px dashed var(--line);padding-top:10px}
+.note{font-size:13.5px;color:var(--muted);margin:0}
+.msg{background:var(--paper);border:1px dashed var(--line);border-radius:12px;padding:12px;font-size:13.5px;white-space:pre-wrap;max-height:220px;overflow:auto;margin:0}
+.linkrow{display:flex;gap:8px;flex-wrap:wrap}
+.status{font-size:13.5px;font-weight:600;color:var(--leaf-2);min-height:1.2em}
+
+/* faq + footer */
+.faq{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+summary{font-weight:700;cursor:pointer}
+details p{margin:10px 0 0;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-block:32px;color:var(--muted);font-size:14px}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+
+@media (max-width:900px){
+  nav.links{display:none}
+  .hero-grid,.ship,.order{grid-template-columns:1fr}
+  .featured{grid-template-columns:1fr}
+  .featured img{min-height:0;aspect-ratio:1}
+  aside.sum{position:static}
+  .try{left:0}
+}
+@media (max-width:640px){
+  section{padding-block:52px}
+  .steps,.faq{grid-template-columns:1fr}
+  form.f{grid-template-columns:1fr;padding:18px}
+  .wrap{padding-inline:16px}
+  .try{position:relative;width:100%;left:0;bottom:0;margin-top:-30px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap bar">
+    <a class="brand" href="#inicio" aria-label="SEMENTE, início">
+      <svg width="34" height="40" viewBox="0 0 52 60" aria-hidden="true"><circle cx="26" cy="38" r="20" fill="var(--coin)"/><circle cx="26" cy="38" r="15" fill="none" stroke="#fff" stroke-width="2.5"/><text x="26" y="43.5" text-anchor="middle" font-size="14" font-weight="800" fill="#fff" font-family="Figtree,sans-serif">MT</text><rect x="24.5" y="8" width="3" height="12" fill="var(--leaf-2)"/><path d="M26 11C29 1 42 0 46 4 42 12 32 13 26 11Z M26 11C23 1 10 0 6 4 10 12 20 13 26 11Z" fill="var(--leaf-2)"/></svg>
+      <span><b>SEMENTE</b><small>COFRES DESAFIO</small></span>
+    </a>
+    <nav class="links" aria-label="Secções">
+      <a href="#modelos">Modelos</a><a href="#como">Como funciona</a><a href="#envio">Envio</a><a href="#perguntas">Perguntas</a>
+    </nav>
+    <a class="btn btn-main btn-sm" href="#encomendar">Encomendar</a>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Cofres desafio em madeira · Entregamos em todo Moçambique</span>
+        <h1>Poupa hoje,<br><span class="gold">colhe amanhã.</span></h1>
+        <p class="lead">Uma caixa de madeira com uma tabela de moedas na frente. A cada depósito, risque uma moeda. Quando riscar todas, a sua meta está guardada.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-main" href="#modelos">Ver os modelos</a>
+          <a class="btn btn-ghost" href="#encomendar">Encomendar agora</a>
+        </div>
+        <div class="trust"><span><i></i>Metas de 2.000 a 100.000 MT</span><span><i></i>Nome personalizado grátis</span><span><i></i>Envio para as 11 províncias</span></div>
+      </div>
+      <div class="hero-art">
+        <div class="disc" aria-hidden="true"></div>
+        <img src="img/hero.webp" width="900" height="735" alt="Mulher sorridente a guardar uma nota de 200 meticais num cofre de madeira com tabela de moedas na tampa">
+        <div class="try" aria-label="Experimente riscar moedas">
+          <div class="try-top"><span>Experimente: toque para riscar</span><span><b id="tryVal">0</b> MT</span></div>
+          <div class="coins" id="tryCoins"></div>
+          <div class="try-hint" id="tryHint">Cada moeda riscada é dinheiro guardado.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="como" style="padding-top:24px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Como funciona</span><h2>Três passos, sem aplicações nem bancos</h2></div>
+      <div class="steps">
+        <div class="step"><div class="n">1</div><h3>Escolha a meta</h3><p>Do Primeiro Cofre (2.000 MT) ao Sonho a Dois (100.000 MT). A tabela já vem calculada, com a soma exata.</p></div>
+        <div class="step"><div class="n">2</div><h3>Guarde na caixa</h3><p>Quando tiver dinheiro, meta a nota pela ranhura. Num dia 20 MT, noutro 200: escolhe a moeda que encaixa no seu dia.</p></div>
+        <div class="step"><div class="n">3</div><h3>Risque a moeda</h3><p>Risque na tabela a moeda com o valor que guardou. Quando estiverem todas riscadas, abra a caixa: a meta está lá dentro.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="modelos">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Modelos</span><h2>Qual é o seu sonho?</h2><p class="lead">13 desafios em 4 tamanhos. O tamanho da caixa acompanha o número de depósitos.</p></div>
+      <div class="filters" role="group" aria-label="Filtrar por tamanho" id="filters"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section id="envio">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Envio</span><h2>Chegamos às 11 províncias</h2></div>
+      <div class="ship">
+        <div class="ship-card">
+          <h3>Em Pemba, entregamos em mão.</h3>
+          <p>Sem custo de entrega na cidade de Pemba. Combinamos o dia e o local pelo WhatsApp.</p>
+          <p>Para as outras províncias enviamos por transportadora. O custo e o prazo dependem do destino e confirmamos tudo consigo antes de pagar.</p>
+          <p>Paga o sinal de 50% para reservar. Em Pemba, o resto paga na entrega; nas outras províncias, antes do envio.</p>
+        </div>
+        <div class="provs" id="provs"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="encomendar">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Encomendar</span><h2>Faça a sua encomenda</h2><p class="lead">Preencha os dados e envie pelo WhatsApp. Respondemos com a confirmação, o custo de envio e os dados para pagar o sinal.</p></div>
+      <div class="order">
+        <form class="f" id="f" novalidate>
+          <div class="fld full"><label for="modelo">Modelo</label><select id="modelo"></select></div>
+          <div class="fld"><label for="qtd">Quantidade</label><div class="qty"><button type="button" id="menos" aria-label="Menos um">−</button><input id="qtd" type="number" min="1" max="20" value="1" inputmode="numeric"><button type="button" id="mais" aria-label="Mais um">+</button></div></div>
+          <div class="fld"><label for="perso">Nome na tabela <span class="opt">(opcional, grátis)</span></label><input id="perso" maxlength="28" placeholder="Ex.: Lúcia & Pedro"></div>
+          <div class="fld"><label for="nome">O seu nome</label><input id="nome" autocomplete="name" placeholder="Nome completo"></div>
+          <div class="fld"><label for="tel">Telefone</label><input id="tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="84 123 4567"></div>
+          <div class="fld"><label for="prov">Província</label><select id="prov"></select></div>
+          <div class="fld"><label for="cidade">Cidade / distrito</label><input id="cidade" placeholder="Ex.: Pemba"></div>
+          <div class="fld full"><label for="morada">Bairro ou ponto de referência</label><input id="morada" placeholder="Ex.: Bairro Cimento, perto do mercado"></div>
+          <div class="fld full"><span style="font-weight:600;font-size:14px">Pagamento do sinal</span>
+            <div class="pay" role="radiogroup" aria-label="Pagamento do sinal">
+              <label><input type="radio" name="pag" value="M-Pesa" checked> M-Pesa</label>
+              <label><input type="radio" name="pag" value="e-Mola"> e-Mola</label>
+              <label><input type="radio" name="pag" value="Transferência bancária"> Transferência</label>
+            </div></div>
+          <div class="fld full"><label for="obs">Observações <span class="opt">(opcional)</span></label><textarea id="obs" placeholder="É um presente? Precisa até uma data?"></textarea></div>
+          <div class="err" id="err" hidden></div>
+        </form>
+
+        <aside class="sum" aria-live="polite">
+          <div class="sum-pic"><img id="sPic" src="img/compacto-10-mil.jpg" alt=""><div><b id="sNome">—</b><div class="note" id="sInfo"></div></div></div>
+          <div class="rows">
+            <div class="row"><span id="sQtdTxt">1 × cofre</span><span id="sSub">—</span></div>
+            <div class="row"><span>Entrega</span><span id="sEnvio">—</span></div>
+            <div class="row total"><span>Total</span><span id="sTotal">—</span></div>
+            <div class="row"><span>Sinal para reservar (50%)</span><span id="sSinal">—</span></div>
+          </div>
+          <a class="btn btn-wa" id="waBtn" href="#encomendar" target="_blank" rel="noopener">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.6-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3Z"/></svg>
+            Enviar encomenda pelo WhatsApp
+          </a>
+          <div class="status" id="status"></div>
+          <details id="msgBox"><summary>Ver a mensagem que vai ser enviada</summary>
+            <pre class="msg" id="msg"></pre>
+            <div class="linkrow" style="margin-top:10px"><button class="btn btn-ghost btn-sm" type="button" id="copy">Copiar mensagem</button></div>
+            <p class="note" style="margin-top:8px" id="waNum"></p>
+          </details>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="perguntas" style="padding-top:20px">
+    <div class="wrap">
+      <div class="sec-head"><span class="eyebrow">Perguntas</span><h2>Antes de encomendar</h2></div>
+      <div class="faq">
+        <details><summary>O dinheiro rende juros?</summary><p>Não. O cofre não é um banco nem um investimento. Ajuda a guardar com disciplina, porque cada depósito fica marcado na tabela.</p></details>
+        <details><summary>Como tiro o dinheiro no fim?</summary><p>O fundo é aparafusado. Quando riscar todas as moedas, desaperta os parafusos e abre. Assim não dá para tirar dinheiro a meio por impulso.</p></details>
+        <details><summary>Posso escolher outra meta?</summary><p>Sim. Diga a meta e o prazo nas observações e preparamos uma tabela à medida, com a soma exata.</p></details>
+        <details><summary>E se não usar todos os valores?</summary><p>Pode trocar: duas moedas de 50 valem uma de 100. O importante é que, no fim, a soma riscada seja a meta.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span><b style="color:var(--ink)">SEMENTE</b> · Cofres Desafio · Pemba, Cabo Delgado</span>
+    <span>Poupa hoje, colhe amanhã.</span>
+  </div>
+</footer>
+
+<script>
+/* ===== CONFIGURAÇÃO DA LOJA: altere aqui ===== */
+const WHATSAPP = "";                 // número com indicativo, só dígitos. Ex.: "25884XXXXXXX"
+const PRECOS = {C: 850, P: 650, M: 950, G: 1250};   // MT por cofre (exemplo: confirmar antes de publicar)
+const TAMANHOS = {
+  C:{nome:"Compacto", medida:"17,2 × 12,7 × 6,9 cm"},
+  P:{nome:"Pequeno",  medida:"17 × 12,5 × 7,5 cm"},
+  M:{nome:"Médio",    medida:"23,5 × 17 × 9,5 cm"},
+  G:{nome:"Grande",   medida:"23,5 × 17 × 12,5 cm"}};
+/* ============================================= */
+
+const MODELOS = [
+ {id:"compacto-10-mil", nome:"Desafio 10 Mil Compacto", meta:10000, n:100, tam:"C", frase:"O nosso primeiro cofre: tabela na tampa, ranhura na frente.", destaque:true},
+ {id:"infantil", nome:"O Meu Primeiro Cofre", meta:2000, n:100, tam:"P", frase:"Para crianças, com moedas de 5 e 10 MT."},
+ {id:"desafio-5-mil", nome:"Desafio 5 Mil", meta:5000, n:100, tam:"P", frase:"Comece pequeno, termine grande."},
+ {id:"volta-as-aulas", nome:"Volta às Aulas", meta:8000, n:150, tam:"M", frase:"Material escolar pago sem aperto."},
+ {id:"desafio-10-mil", nome:"Desafio 10 Mil", meta:10000, n:225, tam:"M", frase:"O clássico, com depósitos a partir de 20 MT."},
+ {id:"telemovel-novo", nome:"Meu Telemóvel Novo", meta:12000, n:180, tam:"M", frase:"Comprar à vista, sem dívidas."},
+ {id:"natal", nome:"Poupança de Natal", meta:15000, n:180, tam:"M", frase:"Um Natal sem dívidas começa hoje."},
+ {id:"fundo-emergencia", nome:"Fundo de Emergência", meta:20000, n:225, tam:"M", frase:"Para quando a vida apertar."},
+ {id:"desafio-25-mil", nome:"Desafio 25 Mil", meta:25000, n:225, tam:"M", frase:"Disciplina hoje, liberdade amanhã."},
+ {id:"capital-negocio", nome:"Capital do Meu Negócio", meta:30000, n:225, tam:"M", frase:"Junte o capital para abrir ou crescer."},
+ {id:"viagem-ferias", nome:"Viagem de Férias", meta:40000, n:225, tam:"M", frase:"Malas prontas, contas pagas."},
+ {id:"desafio-50-mil", nome:"Desafio 50 Mil", meta:50000, n:225, tam:"M", frase:"O seu sonho cabe nesta caixa."},
+ {id:"sonho-a-dois", nome:"Nosso Sonho a Dois", meta:100000, n:300, tam:"G", frase:"Casamento, lobolo, casa: juntos."},
+];
+const PROVINCIAS = [
+ {p:"Cabo Delgado", c:"Pemba", home:true},
+ {p:"Nampula"},{p:"Niassa"},{p:"Zambézia"},{p:"Tete"},{p:"Manica"},
+ {p:"Sofala"},{p:"Inhambane"},{p:"Gaza"},{p:"Maputo Província"},{p:"Maputo Cidade"}];
+
+const fmt = v => Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g,".");
+const $ = id => document.getElementById(id);
+const el = (tag, cls, txt) => {const e=document.createElement(tag); if(cls) e.className=cls; if(txt!==undefined) e.textContent=txt; return e;};
+
+/* --- cartão "experimente" --- */
+const TRY = [20,50,100,50,200,20,100,50,500,100,20,50];
+TRY.forEach((v,i)=>{const b=el("button","coin"+(v>=200?" big":""),String(v)); b.type="button"; b.setAttribute("aria-pressed","false"); b.setAttribute("aria-label",v+" meticais");
+  if(i<3){b.classList.add("x"); b.setAttribute("aria-pressed","true");}
+  b.addEventListener("click",()=>{b.classList.toggle("x"); b.setAttribute("aria-pressed",b.classList.contains("x")); tryUpd();});
+  $("tryCoins").appendChild(b);});
+function tryUpd(){let s=0,n=0;[...$("tryCoins").children].forEach((b,i)=>{if(b.classList.contains("x")){s+=TRY[i];n++;}});
+  $("tryVal").textContent=fmt(s);
+  $("tryHint").textContent = n===TRY.length ? "Tudo riscado: meta cumprida!" : `${n} de ${TRY.length} moedas riscadas.`;}
+tryUpd();
+
+/* --- catálogo --- */
+const FILTROS=[["all","Todos"],["C","Compacto"],["P","Pequeno"],["M","Médio"],["G","Grande"]];
+let filtro="all";
+FILTROS.forEach(([k,t])=>{const b=el("button","chip",t); b.type="button"; b.setAttribute("aria-pressed",k===filtro);
+  b.addEventListener("click",()=>{filtro=k;[...$("filters").children].forEach((c,i)=>c.setAttribute("aria-pressed",FILTROS[i][0]===k));renderGrid();});
+  $("filters").appendChild(b);});
+function renderGrid(){
+  const g=$("grid"); g.textContent="";
+  MODELOS.filter(m=>filtro==="all"||m.tam===filtro).forEach(m=>{
+    const feat = m.destaque && (filtro==="all"||filtro==="C");
+    const card=el("article","card"+(feat?" featured":""));
+    const ib=el("div","imgbox"); const img=el("img"); img.src=`img/${m.id}.jpg`; img.alt=`Cofre ${m.nome}, caixa de madeira com tabela de moedas`; img.loading="lazy"; img.width=640; img.height=640; ib.appendChild(img);
+    if(m.destaque) ib.appendChild(el("span","tag","Novo · 1.º lote"));
+    const b=el("div","card-b");
+    b.appendChild(el("h3",null,m.nome));
+    const meta=el("div","meta"); meta.append(el("span",null,`Meta ${fmt(m.meta)} MT`), el("span",null,`${m.n} depósitos`), el("span",null,TAMANHOS[m.tam].nome));
+    b.appendChild(meta);
+    if(feat){const ul=el("ul","why"); [m.frase,`Caixa ${TAMANHOS.C.medida}`,"Média de 100 MT por depósito","Fundo aparafusado: só abre no fim"].forEach(t=>ul.appendChild(el("li",null,t))); b.appendChild(ul);}
+    else b.appendChild(el("p","note",m.frase));
+    const pr=el("div","price-row"); const p=el("div","price"); p.textContent=fmt(PRECOS[m.tam]); p.appendChild(el("small",null," MT"));
+    const btn=el("button","btn btn-main btn-sm","Escolher"); btn.type="button";
+    btn.addEventListener("click",()=>{$("modelo").value=m.id; upd(); location.hash="encomendar"; document.getElementById("encomendar").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});});
+    pr.append(p,btn); b.appendChild(pr);
+    card.append(ib,b); g.appendChild(card);
+  });
+}
+renderGrid();
+
+/* --- províncias --- */
+PROVINCIAS.forEach(x=>{const d=el("div","prov"+(x.home?" home":"")); d.appendChild(el("b",null,x.p));
+  d.appendChild(el("span",null,x.home?"Pemba: entrega em mão, grátis":"Transportadora · custo a confirmar")); $("provs").appendChild(d);
+  const o=el("option",null,x.p); o.value=x.p; $("prov").appendChild(o);});
+
+/* --- encomenda --- */
+MODELOS.forEach(m=>{const o=el("option",null,`${m.nome} · ${fmt(m.meta)} MT · ${fmt(PRECOS[m.tam])} MT`); o.value=m.id; $("modelo").appendChild(o);});
+// guardar rascunho só neste aparelho
+const CAMPOS=["modelo","qtd","perso","nome","tel","prov","cidade","morada","obs"];
+try{const d=JSON.parse(localStorage.getItem("semente-encomenda")||"{}");CAMPOS.forEach(k=>{if(d[k]!==undefined)$(k).value=d[k];});
+  if(d.pag){const r=document.querySelector(`input[name=pag][value="${d.pag}"]`); if(r) r.checked=true;}}catch(_){}
+
+function dados(){
+  const m=MODELOS.find(x=>x.id===$("modelo").value)||MODELOS[0];
+  const q=Math.max(1,Math.min(20,parseInt($("qtd").value,10)||1));
+  const prov=$("prov").value; const cidade=$("cidade").value.trim();
+  const emPemba = prov==="Cabo Delgado" && /pemba/i.test(cidade||"Pemba");
+  const sub=PRECOS[m.tam]*q;
+  return {m,q,prov,cidade,emPemba,sub,total:sub,sinal:Math.ceil(sub/2),
+    perso:$("perso").value.trim(),nome:$("nome").value.trim(),tel:$("tel").value.trim(),morada:$("morada").value.trim(),obs:$("obs").value.trim(),
+    pag:(document.querySelector("input[name=pag]:checked")||{}).value||"M-Pesa"};
+}
+function mensagem(d){
+  const l=[`Olá SEMENTE! Quero fazer uma encomenda:`,``,
+    `• Modelo: ${d.m.nome} (meta ${fmt(d.m.meta)} MT, tamanho ${TAMANHOS[d.m.tam].nome})`,
+    `• Quantidade: ${d.q}`,
+    d.perso?`• Nome na tabela: ${d.perso}`:null,
+    `• Valor dos cofres: ${fmt(d.sub)} MT`,
+    `• Sinal (50%): ${fmt(d.sinal)} MT por ${d.pag}`,``,
+    `• Nome: ${d.nome||"—"}`, `• Telefone: ${d.tel||"—"}`,
+    `• Entrega: ${d.prov}${d.cidade?", "+d.cidade:""}${d.morada?" ("+d.morada+")":""}`,
+    d.emPemba?`• Entrega em mão em Pemba`:`• Envio por transportadora: aguardo o custo e o prazo`,
+    d.obs?`• Observações: ${d.obs}`:null];
+  return l.filter(x=>x!==null).join("\n");
+}
+function upd(){
+  const d=dados();
+  $("sPic").src=`img/${d.m.id}.jpg`; $("sPic").alt=`Cofre ${d.m.nome}`;
+  $("sNome").textContent=d.m.nome;
+  $("sInfo").textContent=`Meta ${fmt(d.m.meta)} MT · ${d.m.n} depósitos · ${TAMANHOS[d.m.tam].nome}`;
+  $("sQtdTxt").textContent=`${d.q} × ${fmt(PRECOS[d.m.tam])} MT`;
+  $("sSub").textContent=fmt(d.sub)+" MT";
+  $("sEnvio").textContent=d.emPemba?"Grátis em Pemba":"A confirmar";
+  $("sTotal").textContent=fmt(d.total)+" MT"+(d.emPemba?"":" + envio");
+  $("sSinal").textContent=fmt(d.sinal)+" MT";
+  const msg=mensagem(d); $("msg").textContent=msg;
+  if(WHATSAPP){ $("waBtn").href=`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`; $("waNum").textContent=`WhatsApp: +${WHATSAPP}. Se o botão não abrir a aplicação, copie a mensagem e envie para este número.`; }
+  else { $("waBtn").href="#encomendar"; $("waNum").textContent="Número de WhatsApp da loja ainda por configurar."; }
+  try{const s={pag:d.pag};CAMPOS.forEach(k=>s[k]=$(k).value);localStorage.setItem("semente-encomenda",JSON.stringify(s));}catch(_){}
+}
+function validar(){
+  const d=dados(), falta=[];
+  if(!d.nome) falta.push("o seu nome");
+  if(d.tel.replace(/\D/g,"").length<9) falta.push("um telefone com 9 dígitos");
+  if(!d.cidade) falta.push("a cidade ou distrito");
+  const e=$("err");
+  if(falta.length){e.textContent="Falta preencher "+falta.join(", ")+"."; e.hidden=false; return false;}
+  e.hidden=true; return true;
+}
+$("f").addEventListener("input",upd); $("f").addEventListener("change",upd);
+$("f").addEventListener("submit",ev=>ev.preventDefault());
+$("menos").addEventListener("click",()=>{$("qtd").value=Math.max(1,(parseInt($("qtd").value,10)||1)-1);upd();});
+$("mais").addEventListener("click",()=>{$("qtd").value=Math.min(20,(parseInt($("qtd").value,10)||1)+1);upd();});
+$("waBtn").addEventListener("click",ev=>{
+  if(!validar()){ev.preventDefault(); $("status").textContent=""; $("err").scrollIntoView({block:"center"}); return;}
+  if(!WHATSAPP){ev.preventDefault(); $("msgBox").open=true; $("status").textContent="Copie a mensagem e envie-a para o nosso WhatsApp."; return;}
+  $("status").textContent="A abrir o WhatsApp com a sua encomenda. Envie a mensagem para confirmarmos.";
+});
+$("copy").addEventListener("click",async()=>{
+  const t=$("msg").textContent;
+  try{await navigator.clipboard.writeText(t); $("status").textContent="Mensagem copiada.";}
+  catch(_){const r=document.createRange(); r.selectNodeContents($("msg")); const s=getSelection(); s.removeAllRanges(); s.addRange(r); $("status").textContent="Selecionámos a mensagem: copie-a com o menu do seu telefone.";}
+});
+upd();
+</script>
+
+</body>
+</html>
